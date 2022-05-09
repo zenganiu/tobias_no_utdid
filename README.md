@@ -1,146 +1,62 @@
-![logo](./arts/tobias_logo.png)
-![pub package](https://img.shields.io/pub/v/tobias.svg)
+## Tobias_no_utdid
 
-[中文移步这里](./README_CN.md)
+支付宝SDK Flutter插件
 
-QQ Group：892398530。
+> 注：此插件是[Tobias](https://pub.flutter-io.cn/packages/tobias)兼容版，主要解决App已接入阿里百川SDK，构建时可能发生utdid 库相关的冲突。
 
-## What's Tobias
-
-Tobias is a  flutter plugin for AliPaySDK.
-
-## Getting Started
-
-I highly recommend that you read  [the official documents](https://docs.open.alipay.com/204/105051/) before using tobias.
-Tobias helps you to do something but not all.
-For example, you have to configure your URL Scheme on iOS.
-
-
-
-
-
-## Payment
-It's simple,pass Tobias your order info from server :
+### 支付
 ```dart
 import 'package:tobias/tobias.dart' ;
-aliPay(yourOrder);
+
+final result = await aliPay(yourOrder);
 ```
-The result is map contains results from AliPay.The result also contains an external filed named `platform` which
-means the result is from `iOS` or `android`.
-Result sample:
-```dart
+### 支付结果返回
+``` json
 {
-result: partner="2088411752388544"&seller_id="etongka123@163.com"&out_trade_no="180926084213001"&subject="test pay"&total_fee="0.01"&notify_url="http://127.0.0.1/alipay001"&service="mobile.securitypay.pay"&payment_type="1"&_input_charset="utf-8"&it_b_pay="30m"&return_url="m.alipay.com"&success="true"&sign_type="RSA"&sign="nCZ8MDhsNvYNAbrLZJZ2VUy6vydgAp+JCq1aQo6ORDYtI9zwtnja3qNGQNiDJCuktoIj7fSTM487XhjPDqnOreZjIA1GJpxu9D1I3nMXIn1M7DfZ0noDwXcYZ438/jbYac7g8mhpwdKGweLCAni9mO3Y6q3iBFkox8i9PcsGxJY=",
-resultStatus: 9000,
- memo: ,
- platform:iOS
+  "result": partner="2088411752388544"&seller_id="etongka123@163.com"&out_trade_no="180926084213001"&subject="test pay"&total_fee="0.01"&notify_url="http://127.0.0.1/alipay001"&service="mobile.securitypay.pay"&payment_type="1"&_input_charset="utf-8"&it_b_pay="30m"&return_url="m.alipay.com"&success="true"&sign_type="RSA"&sign="nCZ8MDhsNvYNAbrLZJZ2VUy6vydgAp+JCq1aQo6ORDYtI9zwtnja3qNGQNiDJCuktoIj7fSTM487XhjPDqnOreZjIA1GJpxu9D1I3nMXIn1M7DfZ0noDwXcYZ438/jbYac7g8mhpwdKGweLCAni9mO3Y6q3iBFkox8i9PcsGxJY=",
+  resultStatus: 9000,
+  memo: "",
+  platform:iOS
 }
-
 ```
  
- > NOTE:Tobias use pay_V2.
- 
-  
-## Auth
+### 授权
 
-```
-   aliPayAuth("your auth str");
-
+```dart
+   aliPayAuth("xxx");
 ```
 
-## Check AliPay Installation
+### 检查支付宝是否已安装
 
-```
+```dart
     var result = await isAliPayInstalled();
-   
 ``` 
 
-> If you want to check alipay installation of Alipay on iOS,make sure you have added `alipays` into your whitelist in `info.plist`.
-
-
-
-For iOS,yout have to add url schema named `alipay`.
-On Xcode GUI:
-![url_schema](./arts/url_schema.png)
-
-
-in your `info.plist`:
-```
-     <array>
-   		<dict>
-   			<key>CFBundleTypeRole</key>
-   			<string>Editor</string>
-   			<key>CFBundleURLName</key>
-   			<string>alipay</string>
-   			<key>CFBundleURLSchemes</key>
-   			<array>
-   				<string>tobiasexample</string>
-   			</array>
-   		</dict>
-   	</array>
-
+> iOS想要使用isAliPayInstalled检测支付宝是否已安装，需要在`info.plist`加入白名单 `alipays`
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+	<string>alipays</string>
+</array>
 ```
 
-You can also call `tobias.version()` which returns a map contains `version` and `platform`.
+> iOS支付回调需要 `info.plist`中添加URL scheme:
+```xml
+<array>
+    <dict>
+    <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+    <key>CFBundleURLName</key>
+        <string>alipay</string>
+    <key>CFBundleURLSchemes</key>
+        <array>
+	    <string>tobiasexample</string>
+        </array>
+    </dict>
+</array>
 
-
-## Upgrade to 1.0.0
-
-There's no need to override `AppDelegate` since `tobais 1.0.0`. If you have done that before, please remove 
-the following code in your `AppDelegate`:
-
-```objective-c
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-  return [TobiasPlugin handleOpenURL:url];
-}
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
-{
-  return [TobiasPlugin handleOpenURL:url];
-}
 ```
 
-If you have to override these two functions, make sure you have called the `super`:
-```objective-c
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    
-  return [super application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-}
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
-{
-    
-  return [super application:application openURL:url options:options];
-}
-```
-
-
-
-### Donate
-Buy me a cup of coffee。
-
-<img src="./arts/wx.jpeg" height="300">  <img src="./arts/ali.jpeg" height="300">
-
-
-### Subscribe Us On WeChat
-![subscribe](./arts/wx_subscription.png)
-
-## LICENSE
-
-
-    Copyright 2018 OpenFlutter Project
-
-    Licensed to the Apache Software Foundation (ASF) under one or more contributor
-    license agreements.  See the NOTICE file distributed with this work for
-    additional information regarding copyright ownership.  The ASF licenses this
-    file to you under the Apache License, Version 2.0 (the "License"); you may not
-    use this file except in compliance with the License.  You may obtain a copy of
-    the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
-    License for the specific language governing permissions and limitations under
-    the License.
+## 版本变更记录(Tag版本)
+#### 1.0.0
+* 第一个版本
