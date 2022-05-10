@@ -34,7 +34,7 @@ var result = await isAliPayInstalled();
 
 ## IOS端原生工程配置
 
-> iOS想要使用isAliPayInstalled检测支付宝是否已安装，需要在`info.plist`加入白名单 `alipays`
+##### 1.想要使用isAliPayInstalled检测支付宝是否已安装，需要在`info.plist`加入白名单 `alipays`
 ```xml
 <key>LSApplicationQueriesSchemes</key>
 <array>
@@ -42,7 +42,7 @@ var result = await isAliPayInstalled();
 </array>
 ```
 
-> iOS支付回调需要 `info.plist`中添加URL scheme:
+##### 2.支付回调需要 `info.plist`中添加URL scheme:
 ```xml
 <array>
     <dict>
@@ -52,7 +52,7 @@ var result = await isAliPayInstalled();
         <string>alipay</string>
     <key>CFBundleURLSchemes</key>
         <array>
-	    <string>tobiasexample</string>
+	    <string>tobiasexample</string> 
         </array>
     </dict>
 </array>
