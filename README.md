@@ -57,6 +57,4 @@ final result = await aliPay(yourOrder);
 
 ```
 
-## 版本变更记录
-#### 1.0.0
-* 第一个版本
+
