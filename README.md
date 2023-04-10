@@ -2,7 +2,7 @@
 
 支付宝SDK Flutter插件
 
-> 注：此插件是[Tobias](https://github.com/OpenFlutter/tobias)兼容版，主要解决App已接入阿里百川SDK，构建时可能发生utdid 库相关的冲突。
+> 注：此插件是[Tobias](https://github.com/OpenFlutter/tobias)兼容版，主要解决App已接入阿里百川等阿里系SDK，构建时可能发生utdid 库相关的冲突。
 
 ## 使用
 ##### 支付
