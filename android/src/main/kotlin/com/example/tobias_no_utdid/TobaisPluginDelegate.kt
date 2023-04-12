@@ -1,4 +1,4 @@
-package com.jarvan.tobias
+package com.example.tobias_no_utdid
 
 import android.app.Activity
 import android.content.Intent
