@@ -1,54 +1,33 @@
-#import "TobiasPlugin.h"
+#import "TobiasNoUtdidPlugin.h"
 #import <AlipaySDK/AlipaySDK.h>
 
-__weak TobiasPlugin* __tobiasPlugin;
-
-@interface TobiasPlugin()
-
+@interface TobiasNoUtdidPlugin()
 @property (readwrite,copy,nonatomic) FlutterResult callback;
-
 @end
 
-
-
-@implementation TobiasPlugin
-
--(id)init{
-    if(self = [super init]){
-        
-        __tobiasPlugin  = self;
-        
-    }
-    return self;
-}
-
--(void)dealloc{
-    
-}
-
+@implementation TobiasNoUtdidPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"com.jarvanmo/tobias"
+      methodChannelWithName:@"tobias_no_utdid"
             binaryMessenger:[registrar messenger]];
-  TobiasPlugin* instance = [[TobiasPlugin alloc] init];
+  TobiasNoUtdidPlugin* instance = [[TobiasNoUtdidPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
   [registrar addApplicationDelegate:instance];
 }
 
-
-
-
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"pay" isEqualToString:call.method]) {
-      [self pay:call result:result];
+  if ([@"getPlatformVersion" isEqualToString:call.method]) {
+    result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+  } else if ([@"pay" isEqualToString:call.method]) {
+    [self pay:call result:result];
   } else if([@"version" isEqualToString:call.method]){
-      [self getVersion:call result:result];
+    [self getVersion:call result:result];
   } else if([@"auth" isEqualToString:call.method]){
-      [self _auth:call result:result];
+    [self _auth:call result:result];
   } else if([@"isAliPayInstalled" isEqualToString:call.method]){
-      [self  _isAliPayInstalled:call result:result];
+    [self  _isAliPayInstalled:call result:result];
   }else{
-      result(FlutterMethodNotImplemented);
+    result(FlutterMethodNotImplemented);
   }
 }
 
@@ -64,20 +43,18 @@ __weak TobiasPlugin* __tobiasPlugin;
 
 
 +(BOOL)handleOpenURL:(NSURL*)url{
-  
+
     if(!__tobiasPlugin)return NO;
     return [__tobiasPlugin handleOpenURL:url];
-    
+
 }
-
-
 -(BOOL)handleOpenURL:(NSURL*)url{
-    
+
     if ([url.host isEqualToString:@"safepay"]) {
 
         __weak TobiasPlugin* __self = self;
 
-        
+
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
              [__self onPayResultReceived:resultDic];
         }];
@@ -99,7 +76,7 @@ __weak TobiasPlugin* __tobiasPlugin;
         self.callback(mutableDictionary);
         self.callback = nil;
     }
-    
+
 }
 
 -(void)onAuthResultReceived:(NSDictionary*)resultDic{
@@ -121,14 +98,14 @@ __weak TobiasPlugin* __tobiasPlugin;
         return;
     }
 
- 
+
     [self _pay:call result:result urlScheme:urlScheme];
 
 }
 
 -(void) _pay:(FlutterMethodCall*)call result:(FlutterResult)result urlScheme:(NSString *)urlScheme{
     self.callback = result;
-    
+
     __weak TobiasPlugin* __self = self;
 
     [[AlipaySDK defaultService] payOrder:call.arguments[@"order"] fromScheme:urlScheme callback:^(NSDictionary *resultDic) {
@@ -138,16 +115,16 @@ __weak TobiasPlugin* __tobiasPlugin;
 }
 
 -(void) _auth:(FlutterMethodCall*)call result:(FlutterResult)result {
-    
+
     NSString* urlScheme = [self fetchUrlScheme];
     if(!urlScheme){
         result([FlutterError errorWithCode:@"AliPay UrlScheme Not Found" message:@"Config AliPay First" details:nil]);
         return;
     }
     self.callback = result;
-    
+
     __weak TobiasPlugin* __self = self;
-    
+
   [[AlipaySDK defaultService] auth_V2WithInfo:call.arguments
                                          fromScheme:urlScheme
                                            callback:^(NSDictionary *resultDic) {
@@ -179,5 +156,6 @@ __weak TobiasPlugin* __tobiasPlugin;
    BOOL isAliPayInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"alipays://"]]||[[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"alipay://"]];
    result(@(isAliPayInstalled));
 }
+
 
 @end

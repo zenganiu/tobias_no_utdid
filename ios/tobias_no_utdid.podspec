@@ -1,28 +1,27 @@
 #
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
+# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
+# Run `pod lib lint tobias_no_utdid.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'tobias'
+  s.name             = 'tobias_no_utdid'
   s.version          = '0.0.1'
-  s.summary          = 'A Flutter plugin For Alipay.'
+  s.summary          = 'A new Flutter project.'
   s.description      = <<-DESC
-A Flutter plugin For Alipay.
+A new Flutter project.
                        DESC
-  s.homepage         = 'https://github.com/OpenFlutter/tobias'
+  s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'JarvanMo' => 'jarvan.mo@gmail.com' }
+  s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
-  s.static_framework = true
   s.dependency 'Flutter'
-#  s.dependency 'OpenAliPaySDK', '~> 15.6.5'
-#  s.dependency 'AliPay', '~> 2.1.2'
+  s.platform = :ios, '9.0'
+
   s.vendored_frameworks = 'AlipaySDK_No_UTDID/AlipaySDK.framework'
   s.resources = ['AlipaySDK_No_UTDID/AlipaySDK.bundle']
   s.frameworks = 'SystemConfiguration', 'CoreTelephony', 'QuartzCore', 'CoreText', 'CoreGraphics', 'UIKit', 'Foundation', 'CFNetwork', 'CoreMotion', 'WebKit'
   s.libraries = 'z', 'c++'
-
-  s.ios.deployment_target = '8.0'
+  # Flutter.framework does not contain a i386 slice.
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
 end
-
