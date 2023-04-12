@@ -58,5 +58,3 @@ var result = await isAliPayInstalled();
 </array>
 
 ```
-
-
